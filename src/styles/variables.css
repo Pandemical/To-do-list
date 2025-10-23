@@ -1,0 +1,16 @@
+:root {
+    --color-black: #252525;
+
+    --color-purple: #6c63ff;
+    --color-purple-light: #c3c1e5;
+
+    --color-white: #f7f7f7;
+
+    --color-gray: #8e8e8e;
+
+    --border: 1px solid var(--color-purple);
+
+    --input-height: 38px;
+
+    --transition-duration: 0.2s;
+}

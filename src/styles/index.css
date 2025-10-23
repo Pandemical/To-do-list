@@ -1,0 +1,10 @@
+@import 'normolize.css';
+@import 'globals.css';
+@import 'fonts.css';
+@import 'variables.css';
+
+@import './componets/fillter-button.css';
+@import './componets/field.css';
+@import './componets/list.css';
+@import './componets/todo.css';
+@import './componets/switch-theme-button.css';

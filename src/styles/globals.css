@@ -1,0 +1,20 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 1000px;
+    padding: 100px 30px;
+    font-family: 'Inter', sans-serif;
+}
+
+input,
+button,
+label {
+    transition-duration: var(--transition-duration);
+}
+
+:focus-visible {
+    outline: 2px dashed var(--color-black);
+    outline-offset: 4px;
+    transition-duration: 0s !important;
+}

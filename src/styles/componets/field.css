@@ -1,0 +1,25 @@
+.todo__field {
+    position: relative;
+
+    &:has(.field__input:not(:placeholder-shown)) .field__label {
+        scale: 0.9;
+        translate: -1.2em -2.5em;
+        color: var(--color-purple);
+    }
+}
+
+.field__label {
+    position: absolute;
+    top: 20%;
+    left: 17px;
+    color: var(--color-gray);
+}
+
+.field__input {
+    width: 600px;
+    height: var(--input-height);
+    border-radius: 5px;
+    border: var(--border);
+    padding-left: 17px;
+    outline: none;
+}

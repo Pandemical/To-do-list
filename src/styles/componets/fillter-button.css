@@ -1,0 +1,18 @@
+.todo__filter-button {
+    width: 85px;
+    height: var(--input-height);
+    color: var(--color-white);
+    border: 1px solid var(--color-purple);
+    border-radius: 5px;
+    background-color: var(--color-purple);
+
+    &::after {
+        content: "";
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        background-image: url(../../icons/dropdown-mark-icon.svg);
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+}
