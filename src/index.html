@@ -9,7 +9,7 @@
     <script src="script.js" defer></script>
 </head>
 
-<body >
+<body>
     <header class="header">
         <div class="header__inner todo" data-js-todo>
             <h1 class="todo__title">To Do List</h1>
@@ -19,10 +19,11 @@
                     <input type="search" class="field__input" id="search-task" data-js-todo-search-task-input
                         placeholder=" " autocomplete="off">
                 </div>
-                <button class="todo__filter-button" data-js-todo-filter>
-                    <span class="filter__selected">All</span>
-                    <span class="filter__arrow"></span>
-                </button>
+                <select class="todo__filter-select filter-select" name="state-tasks" id="" data-js-todo-filter>
+                    <option class="filter-select__choice" value="all" selected>All</option>
+                    <option class="filter-select__choice" value="complited">Complite</option>
+                    <option class="filter-select__choice" value="incomplited">Incomplete</option>
+                </select>
                 <button class="todo__switch-theme-button" data-js-todo-change-theme type="button"><svg width="22"
                         height="22" viewBox="0 0 22 22" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -34,64 +35,15 @@
     </header>
     <main class="content">
         <section class="total-tasks" data-js-total-tasks>
-            <ul class="total-tasks__list" data-js-total-tasks-list>
-                <li class="total-tasks__item list-item" data-js-list-item>
-                    <input type="checkbox" class="list-item__checkbox" data-js-list-item-checkbox id="item-1"
-                        placeholder=" ">
-                    <label for="item-1" class="list-item__label" data-js-list-item-label>Todo 1</label>
-                    <button class="list-item__edit-button" data-js-list-item-edit-button type="button"><svg width="14" height="14" viewBox="0 0 14 14"
-                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M7.17272 3.49106L0.5 10.1637V13.5H3.83636L10.5091 6.82736M7.17272 3.49106L9.5654 1.09837L9.5669 1.09695C9.8962 0.767585 10.0612 0.602613 10.2514 0.540824C10.4189 0.486392 10.5993 0.486392 10.7669 0.540824C10.9569 0.602571 11.1217 0.767352 11.4506 1.09625L12.9018 2.54738C13.2321 2.87769 13.3973 3.04292 13.4592 3.23337C13.5136 3.40088 13.5136 3.58133 13.4592 3.74885C13.3974 3.93916 13.2324 4.10414 12.9025 4.43398L12.9018 4.43468L10.5091 6.82736M7.17272 3.49106L10.5091 6.82736"
-                                stroke="#CDCDCD" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </button>
-                    <button class="list-item__delete-button" data-js-list-item-delete-button type="button" aria-label="Delete"
-                        title="Delete"><svg width="13" height="16" viewBox="0 0 13 16" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M0.999137 6.61505C0.932117 5.74386 1.62095 5 2.49471 5H9.75505C10.6289 5 11.3177 5.74385 11.2507 6.61505L10.7314 13.365C10.6713 14.1465 10.0196 14.75 9.23582 14.75H3.01394C2.23014 14.75 1.57848 14.1465 1.51836 13.365L0.999137 6.61505Z"
-                                stroke="#CDCDCD" />
-                            <path d="M11.75 2.75H0.5" stroke="#CDCDCD" stroke-linecap="round" />
-                            <path
-                                d="M4.625 1.25C4.625 0.83579 4.96077 0.5 5.375 0.5H6.875C7.28922 0.5 7.625 0.83579 7.625 1.25V2.75H4.625V1.25Z"
-                                stroke="#CDCDCD" />
-                            <path d="M7.625 8V11.75" stroke="#CDCDCD" stroke-linecap="round" />
-                            <path d="M4.625 8V11.75" stroke="#CDCDCD" stroke-linecap="round" />
-                        </svg>
-                    </button>
-                </li>
-                <li class="total-tasks__item list-item" data-js-list-item>
-                    <input type="checkbox" class="list-item__checkbox" data-js-list-item-checkbox id="item-1"
-                        placeholder=" ">
-                    <label for="item-1" class="list-item__label" data-js-list-item-label></label>
-                    <button class="list-item__edit-button" data-js-list-item-button type="button"><svg width="14"
-                            height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M7.17272 3.49106L0.5 10.1637V13.5H3.83636L10.5091 6.82736M7.17272 3.49106L9.5654 1.09837L9.5669 1.09695C9.8962 0.767585 10.0612 0.602613 10.2514 0.540824C10.4189 0.486392 10.5993 0.486392 10.7669 0.540824C10.9569 0.602571 11.1217 0.767352 11.4506 1.09625L12.9018 2.54738C13.2321 2.87769 13.3973 3.04292 13.4592 3.23337C13.5136 3.40088 13.5136 3.58133 13.4592 3.74885C13.3974 3.93916 13.2324 4.10414 12.9025 4.43398L12.9018 4.43468L10.5091 6.82736M7.17272 3.49106L10.5091 6.82736"
-                                stroke="#CDCDCD" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg></button>
-                    <button class="list-item__delete-button" type="button" aria-label="Delete" title="Delete"><svg
-                            width="13" height="16" viewBox="0 0 13 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M0.999137 6.61505C0.932117 5.74386 1.62095 5 2.49471 5H9.75505C10.6289 5 11.3177 5.74385 11.2507 6.61505L10.7314 13.365C10.6713 14.1465 10.0196 14.75 9.23582 14.75H3.01394C2.23014 14.75 1.57848 14.1465 1.51836 13.365L0.999137 6.61505Z"
-                                stroke="#CDCDCD" />
-                            <path d="M11.75 2.75H0.5" stroke="#CDCDCD" stroke-linecap="round" />
-                            <path
-                                d="M4.625 1.25C4.625 0.83579 4.96077 0.5 5.375 0.5H6.875C7.28922 0.5 7.625 0.83579 7.625 1.25V2.75H4.625V1.25Z"
-                                stroke="#CDCDCD" />
-                            <path d="M7.625 8V11.75" stroke="#CDCDCD" stroke-linecap="round" />
-                            <path d="M4.625 8V11.75" stroke="#CDCDCD" stroke-linecap="round" />
-                        </svg></button>
-                </li>
-            </ul>
+            <ul class="total-tasks__list" data-js-total-tasks-list></ul>
             <button class="total-tasks__add-task" data-js-add-task-button>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" clip-rule="evenodd"
                         d="M10.5 22.5C10.5 22.8978 10.658 23.2794 10.9393 23.5607C11.2206 23.842 11.6022 24 12 24C12.3978 24 12.7794 23.842 13.0607 23.5607C13.342 23.2794 13.5 22.8978 13.5 22.5V13.5H22.5C22.8978 13.5 23.2794 13.342 23.5607 13.0607C23.842 12.7794 24 12.3978 24 12C24 11.6022 23.842 11.2206 23.5607 10.9393C23.2794 10.658 22.8978 10.5 22.5 10.5H13.5V1.5C13.5 1.10218 13.342 0.720644 13.0607 0.43934C12.7794 0.158035 12.3978 0 12 0C11.6022 0 11.2206 0.158035 10.9393 0.43934C10.658 0.720644 10.5 1.10218 10.5 1.5V10.5H1.5C1.10218 10.5 0.720644 10.658 0.43934 10.9393C0.158035 11.2206 0 11.6022 0 12C0 12.3978 0.158035 12.7794 0.43934 13.0607C0.720644 13.342 1.10218 13.5 1.5 13.5H10.5V22.5Z" />
                 </svg>
             </button>
-            <div class="total-tasks__empty-message" data-js-total-tasks-empty-message><svg width="221" height="174"
+            <div class="total-tasks__empty-message" data-js-total-tasks-empty-message>
+                <svg width="221" height="174"
                     viewBox="0 0 221 174" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M111.934 168.852C153.422 167.978 186.917 160.771 186.748 152.756C186.578 144.741 152.808 138.952 111.319 139.827C69.8311 140.702 36.3357 147.908 36.5053 155.923C36.6749 163.939 70.4453 169.727 111.934 168.852Z"
@@ -390,9 +342,29 @@
                             <stop offset="1" />
                         </linearGradient>
                     </defs>
-                </svg></div>
+                </svg>
+                <p>Empty...</p>
+            </div>
         </section>
     </main>
+    <div class="modal" id="add-task-modal" data-js-add-task-modal>
+        <div class="modal__content" data-js-add-task-modal-content> 
+            <h3 class="modal__title">New Task</h3>
+            <form class="modal__form" data-js-add-task-form>
+                <div class="modal__field">
+                    <label for="task-title" class="modal__label">Task Title</label>
+                    <input type="text" id="task-title" class="modal__input" data-js-add-task-input
+                        placeholder="Enter task title..." required>
+                </div>
+                <div class="modal__actions">
+                    <button type="button" class="modal__button modal__button--cancel"
+                        data-js-add-task-cancel>Cancel</button>
+                    <button type="submit" class="modal__button modal__button--confirm" data-js-add-task-confirm>Add
+                        Task</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </body>
 
 </html>

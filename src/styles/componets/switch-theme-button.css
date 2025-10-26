@@ -12,3 +12,11 @@
         background-color: transparent;
     }
 }
+
+.is-dark-theme {
+    color: var(--color-white);
+    &:not(svg) {
+        background-color: var(--color-black);
+    }
+
+}

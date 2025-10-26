@@ -85,17 +85,12 @@
 
 .total-tasks__empty-message {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
 
     &:not(.is-visible) {
         opacity: 0;
         visibility: hidden;
-    }
-}
-
-.total-tasks__list,
-.total-tasks__empty-message {
-    &:empty {
-        display: none;
     }
 }

@@ -1,10 +1,10 @@
 class Todo {
     selectors = {
         header: '[data-js-todo]',
-        newTaskSearchForm: '[data-js-todo-search-task-form]',
-        newTaskSearchInput: '[data-js-todo-search-task-input]',
+        taskSearchForm: '[data-js-todo-search-task-form]',
+        taskSearchInput: '[data-js-todo-search-task-input]',
         buttonChangeTheme: '[data-js-todo-change-theme]',
-        buttonFillter: '[data-js-todo-filter]',
+        selectFilter: '[data-js-todo-filter]',
         main: '[data-js-total-tasks]',
         list: '[data-js-total-tasks-list]',
         item: '[data-js-list-item]',
@@ -13,12 +13,17 @@ class Todo {
         itemEditButton: '[data-js-list-item-edit-button]',
         itemDeleteButton: '[data-js-list-item-delete-button]',
         emptyMessage: '[data-js-total-tasks-empty-message]',
-        addTaskButton: '[data-js-add-task-button]',
+        openModalButton: '[data-js-add-task-button]',
+        modal: '[data-js-add-task-modal]',
+        modalContent: '[data-js-add-task-modal-content]',
+        modalForm: '[data-js-add-task-form]',
+        closeModalButton: '[data-js-add-task-cancel]',
+        newTaskInput: '[data-js-add-task-input]',
+        addTaskButton: '[data-js-add-task-confirm]',
     }
 
     stateClasses = {
         isVisible: 'is-visible',
-        isDissapearing: 'is-dissapearing',
     }
 
     localeStorageKey = 'todo-items'
@@ -26,25 +31,33 @@ class Todo {
     constructor() {
         this.headerElement = document.querySelector(this.selectors.header)
         this.mainElement = document.querySelector(this.selectors.main)
+        this.modalElement = document.querySelector(this.selectors.modal)
 
-        this.newTaskSearchFormElement = this.headerElement.querySelector(this.selectors.newTaskSearchForm)
-        this.newTaskSearchInputElement = this.headerElement.querySelector(this.selectors.newTaskSearchInput)
+        this.taskSearchFormElement = this.headerElement.querySelector(this.selectors.taskSearchForm)
+        this.taskSearchInputElement = this.headerElement.querySelector(this.selectors.taskSearchInput)
         this.buttonChangeThemeElement = this.headerElement.querySelector(this.selectors.buttonChangeTheme)
-        this.buttonFillterFormElement = this.headerElement.querySelector(this.selectors.buttonFillter)
+        this.selectFilterElement = this.headerElement.querySelector(this.selectors.selectFilter)
+
         this.listElement = this.mainElement.querySelector(this.selectors.list)
         this.itemElement = this.mainElement.querySelector(this.selectors.item)
-        this.itemEditButtonElement = this.mainElement.querySelector(this.selectors.itemEditButton)
-        this.itemEditButtonElement = this.mainElement.querySelector(this.selectors.itemEditButton)
-        this.itemDeleteButtonElement = this.mainElement.querySelector(this.selectors.itemDeleteButton)
-        this.itemEditButtonElement = this.mainElement.querySelector(this.selectors.itemEditButton)
         this.emptyMessageElement = this.mainElement.querySelector(this.selectors.emptyMessage)
-        this.addTaskButtonElement = this.mainElement.querySelector(this.selectors.addTaskButton)
+        this.openModalButtonElement = this.mainElement.querySelector(this.selectors.openModalButton)
+
+        this.closeModalButtonElement = this.modalElement.querySelector(this.selectors.closeModalButton)
+        this.addTaskButtonElement = this.modalElement.querySelector(this.selectors.addTaskButton)
+        this.newTaskInputElement = this.modalElement.querySelector(this.selectors.newTaskInput)
+        this.modalContentElement = this.modalElement.querySelector(this.selectors.modalContent)
+        this.modalFormElement = this.modalElement.querySelector(this.selectors.modalForm)
 
         this.state = {
             items: this.getItemsFromLocalStorage(),
             fillteredItems: null,
             searchQuery: '',
         }
+
+        this.render()
+        this.loadtheme()
+        this.bindEvents()
     }
 
     getItemsFromLocalStorage() {
@@ -71,15 +84,12 @@ class Todo {
     }
 
     render() {
-        this.listElement.textContent = this.state.items.length
 
-        const items = this.state.items ?? this.state.items
-
-        this.listElement.innerHTML = items.length.map(({ id, tiitle, isChecked }) => `
-                            <li class="total-tasks__item list-item" data-js-list-item>
-                    <input type="checkbox" class="list-item__checkbox" data-js-list-item-checkbox id="item-1"
-                        placeholder=" ">
-                    <label for="item-1" class="list-item__label" data-js-list-item-label>Todo 1</label>
+        const itemsToRender = this.state.fillteredItems ?? this.state.items
+        this.listElement.innerHTML = itemsToRender.map(({ id, title, isChecked }) => `
+                <li class="total-tasks__item list-item" data-js-list-item>
+                    <input type="checkbox" id="${id}"  ${isChecked ? 'checked' : ''} class="list-item__checkbox" data-js-list-item-checkbox placeholder=" ">
+                    <label for="${id}" class="list-item__label" data-js-list-item-label>${title}</label>
                     <button class="list-item__edit-button" data-js-list-item-edit-button type="button"><svg width="14" height="14" viewBox="0 0 14 14"
                             fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -102,7 +112,190 @@ class Todo {
                         </svg>
                     </button>
                 </li>
-        `)
+        `).join('')
+
+        const emptyMessage = this.emptyMessageElement
+        if (itemsToRender.length === 0) {
+            emptyMessage.classList.add(this.stateClasses.isVisible)
+        } else {
+            emptyMessage.classList.remove(this.stateClasses.isVisible)
+        }
+    }
+
+    addItem(title) {
+        this.state.items.push({
+            id: crypto?.randomUUID() ?? Date.now().toString(),
+            title: title,
+            isChecked: false,
+        })
+        this.saveItmesLocalStorage()
+        this.render()
+        this.changeColorSvg()
+    }
+
+    deleteItem(id) {
+        this.state.items = this.state.items.filter((item) => {
+            return item.id !== id
+        })
+        this.saveItmesLocalStorage()
+        this.render()
+        this.changeColorSvg()
+    }
+
+    toogleCheckedState(id) {
+        this.state.items = this.state.items.map((item) => {
+            if (item.id === id) {
+                return {
+                    ...item,
+                    isChecked: !item.isChecked,
+                }
+            }
+            return item
+        })
+        this.saveItmesLocalStorage()
+        this.render()
+        this.changeColorSvg()
+    }
+
+    filter() {
+        const queryFormatted = this.state.searchQuery.toLocaleLowerCase()
+        this.state.fillteredItems = this.state.items.filter(({ title }) => {
+            const titleFormatted = title.toLowerCase()
+
+            return titleFormatted.includes(queryFormatted)
+        })
+        this.render()
+        this.changeColorSvg()
+    }
+
+    resetFilter() {
+        this.state.fillteredItems = null
+        this.state.searchQuery = ''
+        this.render()
+        this.changeColorSvg()
+    }
+
+    onSearchTaskFormSubmit = (event) => {
+        event.preventDefault()
+    }
+
+    onSearchTaskInputChange = ({ target }) => {
+        const value = target.value.trim()
+
+        if (value.length > 0) {
+            this.state.searchQuery = value
+            this.filter()
+        } else {
+            this.resetFilter()
+        }
+    }
+
+    onClick = ({ target }) => {
+        if (target.matches(this.selectors.itemDeleteButton) || (target.closest(this.selectors.itemDeleteButton))) {
+            const itemElement = target.closest(this.selectors.item)
+            const itemChecboxElement = itemElement.querySelector(this.selectors.itemChecbox)
+            this.deleteItem(itemChecboxElement.id)
+        }
+    }
+
+    onChange = ({ target }) => {
+        if (target.matches(this.selectors.itemChecbox)) {
+            this.toogleCheckedState(target.id)
+        }
+    }
+
+    onOpenModal = () => {
+        this.modalElement.classList.add('modal--open')
+        const input = this.modalElement.querySelector(this.selectors.newTaskInput)
+        input.focus()
+    }
+
+    onCloseModal = () => {
+        this.modalElement.classList.remove('modal--open')
+    }
+
+    onAddTask = (event) => {
+        event.preventDefault()
+        const value = this.newTaskInputElement.value.trim()
+        this.addItem(value)
+        this.onCloseModal()
+        this.newTaskInputElement.value = ''
+    }
+
+    onSelectFilter = (event) => {
+        const filtertOption = event.target.value
+        this.applyFilter(filtertOption)
+    }
+
+    applyFilter(filtertOption) {
+        switch (filtertOption) {
+            case 'complited':
+                this.state.fillteredItems = this.state.items.filter((item) => item.isChecked)
+                break;
+            case 'incomplited':
+                this.state.fillteredItems = this.state.items.filter((item) => !item.isChecked)
+                break;
+            default:
+                this.state.fillteredItems = null
+                break;
+        }
+        this.render()
+        this.changeColorSvg()
+    }
+
+    onChangeTheme = () => {
+        const elements = [
+            document.body,
+            this.modalContentElement,
+            this.taskSearchInputElement,
+            this.newTaskInputElement,
+        ]
+        elements.forEach(element => {
+            element?.classList.toggle('is-dark-theme')
+        })
+
+        if (document.body.classList.contains('is-dark-theme')) {
+            localStorage.setItem('theme', 'dark')
+        } else {
+            localStorage.setItem('theme', 'light')
+        }
+
+        this.changeColorSvg()
+    }
+
+    changeColorSvg = () => {
+
+        const itemEditButtons = this.mainElement.querySelectorAll(this.selectors.itemEditButton)
+        const itemDeleteButtons = this.mainElement.querySelectorAll(this.selectors.itemDeleteButton)
+
+        const allEditSvgs = Array.from(itemEditButtons).map(button => button.querySelector('svg'))
+        const allDeleteSvgs = Array.from(itemDeleteButtons).map(button => button.querySelector('svg'))
+        const elements = [
+            ...allEditSvgs,
+            ...allDeleteSvgs,
+        ]
+        elements.forEach(element => {
+            element?.classList.toggle('is-dark-theme')
+        })
+    }
+
+    loadtheme() {
+        const savedTheme = localStorage.getItem('theme')
+        if (savedTheme === 'dark') {
+            this.onChangeTheme()
+        }
+    }
+
+    bindEvents() {
+        this.taskSearchFormElement.addEventListener('submit', this.onSearchTaskFormSubmit)
+        this.taskSearchInputElement.addEventListener('input', this.onSearchTaskInputChange)
+        this.listElement.addEventListener('click', this.onClick)
+        this.listElement.addEventListener('change', this.onChange)
+        this.openModalButtonElement.addEventListener('click', this.onOpenModal)
+        this.closeModalButtonElement.addEventListener('click', this.onCloseModal)
+        this.modalFormElement.addEventListener('submit', this.onAddTask)
+        this.selectFilterElement.addEventListener('change', this.onSelectFilter)
+        this.buttonChangeThemeElement.addEventListener('click', this.onChangeTheme)
     }
 }
 
