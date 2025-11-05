@@ -120,6 +120,8 @@ class Todo {
         } else {
             emptyMessage.classList.remove(this.stateClasses.isVisible)
         }
+
+        this.changeColorSvg()
     }
 
     addItem(title) {
@@ -130,7 +132,6 @@ class Todo {
         })
         this.saveItmesLocalStorage()
         this.render()
-        this.changeColorSvg()
     }
 
     deleteItem(id) {
@@ -139,7 +140,6 @@ class Todo {
         })
         this.saveItmesLocalStorage()
         this.render()
-        this.changeColorSvg()
     }
 
     toogleCheckedState(id) {
@@ -154,7 +154,6 @@ class Todo {
         })
         this.saveItmesLocalStorage()
         this.render()
-        this.changeColorSvg()
     }
 
     filter() {
@@ -165,14 +164,12 @@ class Todo {
             return titleFormatted.includes(queryFormatted)
         })
         this.render()
-        this.changeColorSvg()
     }
 
     resetFilter() {
         this.state.fillteredItems = null
         this.state.searchQuery = ''
         this.render()
-        this.changeColorSvg()
     }
 
     onSearchTaskFormSubmit = (event) => {
@@ -240,7 +237,6 @@ class Todo {
                 break;
         }
         this.render()
-        this.changeColorSvg()
     }
 
     onChangeTheme = () => {
@@ -264,7 +260,7 @@ class Todo {
     }
 
     changeColorSvg = () => {
-
+        const savedTheme = localStorage.getItem('theme')
         const itemEditButtons = this.mainElement.querySelectorAll(this.selectors.itemEditButton)
         const itemDeleteButtons = this.mainElement.querySelectorAll(this.selectors.itemDeleteButton)
 
@@ -274,9 +270,13 @@ class Todo {
             ...allEditSvgs,
             ...allDeleteSvgs,
         ]
+        
         elements.forEach(element => {
-            element?.classList.toggle('is-dark-theme')
-        })
+        if (savedTheme === 'dark') { 
+            element?.classList.add('is-dark-theme')
+        } else {
+            element?.classList.remove('is-dark-theme')
+        } })
     }
 
     loadtheme() {
